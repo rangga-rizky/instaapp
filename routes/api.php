@@ -14,4 +14,5 @@ Route::middleware('auth:sanctum')->group(function () {
     
     Route::post('/posts', [\App\Http\Controllers\Api\PostController::class, 'create']);
     Route::get('/posts', [\App\Http\Controllers\Api\PostController::class, 'index']);
+    Route::post('/replies', [\App\Http\Controllers\Api\ReplyController::class, 'create']);
 });

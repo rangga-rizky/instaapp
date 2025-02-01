@@ -16,7 +16,6 @@ return new class extends Migration
             $table->integer('user_id');
             $table->string('caption');
             $table->text('image_url');
-            $table->decimal('price', 10, 2);
             $table->timestamps();
         });
     }

@@ -11,5 +11,7 @@ Route::post('/register', [\App\Http\Controllers\Api\AuthController::class, 'regi
 Route::post('/login', [\App\Http\Controllers\Api\AuthController::class, 'login']);
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [\App\Http\Controllers\Api\AuthController::class, 'logout']);
+    
     Route::post('/posts', [\App\Http\Controllers\Api\PostController::class, 'create']);
+    Route::get('/posts', [\App\Http\Controllers\Api\PostController::class, 'index']);
 });

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Responses\PostResponse;
+use App\Http\Responses\PostCollectionResponse;
 use App\Models\Post;
 use Illuminate\Support\Facades\Storage;
 
@@ -28,5 +29,27 @@ class PostController extends Controller
         $post->save();
 
         return new PostResponse($post);
+    }
+
+    public function index(Request $request)
+    {
+        $limit = $request->input('limit', 10);
+        $cursor = $request->input('cursor');
+
+        $query = Post::with('user')->orderBy('id', 'desc');
+
+        if ($cursor) {
+            $query->where('id', '<', $cursor);
+        }
+
+        $posts = $query->limit($limit + 1)->get();
+
+        $nextCursor = null;
+        if ($posts->count() > $limit) {
+            $nextCursor = $posts->last()->id;
+            $posts = $posts->slice(0, $limit);
+        }
+
+        return new PostCollectionResponse($posts, $nextCursor);
     }
 }

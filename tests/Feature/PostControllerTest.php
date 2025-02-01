@@ -43,4 +43,34 @@ class PostControllerTest extends TestCase
         ]);
 
     }
+
+    public function test_index_posts()
+    {
+        $user = User::factory()->create();
+        $this->actingAs($user);
+
+        $posts = Post::factory()->count(15)->create(['user_id' => $user->id]);
+
+        $response = $this->getJson('/api/posts?limit=10');
+
+        $response->assertStatus(200)
+                 ->assertJsonStructure([
+                     'data' => [
+                         '*' => [
+                             'id',
+                             'caption',
+                             'image_url',
+                             'user' => [
+                                 'name'
+                             ],
+                             'created_at',
+                             'updated_at'
+                         ]
+                     ],
+                     'next_cursor'
+                 ]);
+
+        $this->assertCount(10, $response->json('data'));
+        $this->assertNotNull($response->json('next_cursor'));
+    }
 }

@@ -33,6 +33,7 @@ class PostController extends Controller
 
     public function index(Request $request)
     {
+        $userId = auth()->id();
         $limit = $request->input('limit', 10);
         $cursor = $request->input('cursor');
 
@@ -51,6 +52,10 @@ class PostController extends Controller
             $nextCursor = $posts->last()->id;
             $posts = $posts->slice(0, $limit);
         }
+
+        $posts->each(function ($post) use ($userId) {
+            $post->is_liked_by_user = $post->likes()->where('user_id', $userId)->exists();
+        });
 
         return new PostCollectionResponse($posts, $nextCursor);
     }

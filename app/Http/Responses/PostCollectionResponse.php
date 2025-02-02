@@ -28,6 +28,7 @@ class PostCollectionResponse implements Responsable
                     ],
                     'likes_count' => $post->likes_count,
                     'replies_count' => $post->replies_count,
+                    'is_liked_by_user' => $post->is_liked_by_user,
                     'created_at' => $post->created_at,
                     'updated_at' => $post->updated_at,
                 ];

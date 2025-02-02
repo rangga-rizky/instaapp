@@ -16,7 +16,14 @@ class ReplyResponse implements Responsable
     public function toResponse($request)
     {
         return response()->json([
-            'data' => $this->reply,
+            'data' => [
+                'id' => $this->reply->id,
+                'message' => $this->reply->message,
+                'user' => [
+                    'name' => $this->reply->user->name,
+                ],
+                'created_at' => $this->reply->created_at,
+            ]
         ], 201);
     }
 }

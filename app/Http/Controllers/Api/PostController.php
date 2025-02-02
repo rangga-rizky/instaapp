@@ -25,7 +25,7 @@ class PostController extends Controller
         $post = new Post();
         $post->caption = $request->caption;
         $post->user_id = $userId;
-        $post->image_url = Storage::url($imagePath);
+        $post->image_url = request()->getSchemeAndHttpHost() . Storage::url($imagePath);
         $post->save();
 
         return new PostResponse($post);
@@ -36,7 +36,9 @@ class PostController extends Controller
         $limit = $request->input('limit', 10);
         $cursor = $request->input('cursor');
 
-        $query = Post::with('user')->orderBy('id', 'desc');
+        $query = Post::with(['user'])
+            ->withCount(['likes', 'replies'])
+            ->orderBy('id', 'desc');
 
         if ($cursor) {
             $query->where('id', '<', $cursor);

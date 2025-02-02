@@ -26,6 +26,8 @@ class PostCollectionResponse implements Responsable
                     'user' => [
                         'name' => $post->user->name,
                     ],
+                    'likes_count' => $post->likes_count,
+                    'replies_count' => $post->replies_count,
                     'created_at' => $post->created_at,
                     'updated_at' => $post->updated_at,
                 ];

@@ -28,7 +28,7 @@ class PostController extends Controller
         $post->image_url = request()->getSchemeAndHttpHost() . Storage::url($imagePath);
         $post->save();
 
-        return new PostResponse($post);
+        return new PostResponse($post, 201);
     }
 
     public function index(Request $request)
@@ -58,5 +58,26 @@ class PostController extends Controller
         });
 
         return new PostCollectionResponse($posts, $nextCursor);
+    }
+
+    public function show(Request $request)
+    {
+        $userId = auth()->id();
+        $postId = $request->route('id');
+
+        $post = Post::with(['user'])
+            ->withCount(['likes', 'replies'])
+            ->find($postId);
+        
+        if (!$post) {
+            return response()->json([
+                'message' => 'Post not found',
+            ], 404);
+        }
+        $post->replies = $post->replies()
+        ->select('id', 'post_id', 'user_id', 'message', 'created_at', 'updated_at')
+        ->with(['user:id,name'])
+        ->get();
+        return new PostResponse($post);
     }
 }

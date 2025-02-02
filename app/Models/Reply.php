@@ -11,7 +11,7 @@ class Reply extends Model
         return $this->morphMany(Like::class, 'likeable');
     }
 
-    public function user(): BelongsTo
+    public function user()
     {
         return $this->belongsTo(User::class);
     }

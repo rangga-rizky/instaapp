@@ -6,17 +6,18 @@ use Illuminate\Contracts\Support\Responsable;
 
 class PostResponse implements Responsable
 {
-    protected $post;
+    protected $post, $http_code;
 
-    public function __construct($post)
+    public function __construct($post, $http_code = 200)
     {
         $this->post = $post;
+        $this->http_code = $http_code;
     }
 
     public function toResponse($request)
     {
         return response()->json([
             'data' => $this->post,
-        ], 201);
+        ], $this->http_code);
     }
 }

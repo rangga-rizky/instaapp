@@ -63,6 +63,9 @@ class PostControllerTest extends TestCase
                              'user' => [
                                  'name'
                              ],
+                             'likes_count',
+                             'replies_count',
+                             'is_liked_by_user',
                              'created_at',
                              'updated_at'
                          ]

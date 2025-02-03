@@ -102,9 +102,8 @@ class PostControllerTest extends TestCase
                          'replies' => [
                              '*' => [
                                  'id',
-                                 'post_id',
-                                 'user_id',
                                  'message',
+                                 'is_liked_by_user',
                                  'user' => [
                                      'id',
                                      'name'

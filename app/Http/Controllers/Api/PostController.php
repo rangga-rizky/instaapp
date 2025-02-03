@@ -74,10 +74,15 @@ class PostController extends Controller
                 'message' => 'Post not found',
             ], 404);
         }
+
         $post->replies = $post->replies()
-        ->select('id', 'post_id', 'user_id', 'message', 'created_at', 'updated_at')
-        ->with(['user:id,name'])
-        ->get();
+            ->select('id', 'post_id', 'user_id', 'message', 'created_at', 'updated_at')
+            ->with(['user:id,name'])
+            ->get()
+            ->each(function ($reply) use ($userId) {
+                $reply->is_liked_by_user = $reply->likes()->where('user_id', $userId)->exists();
+            });
+
         return new PostResponse($post);
     }
 }
